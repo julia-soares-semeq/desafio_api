@@ -5,4 +5,4 @@ url.env
 /app/routers/__pycache__
 /app/client.py
 /app/__init__.py
-/frontend/front-end-react/node_modules/
+
