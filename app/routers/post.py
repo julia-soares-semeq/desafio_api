@@ -12,8 +12,8 @@ security = HTTPBearer()
 load_dotenv(dotenv_path='C:\\Users\\TESTE\\Documents\\desafio\\app\\core\\url.env')
 
 class Credentials(BaseModel):
-    username: str
-    password: str
+    username:str
+    password:str
 class Token(BaseModel):
     token: str
 class Refresh(BaseModel):
@@ -22,9 +22,10 @@ class Refresh(BaseModel):
 @router.post("/token")
 async def retrive_token(credentials: Credentials):
     url_token = os.getenv("url_token")
+    headers = {"Content-Type": "application/JSON"}
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(url_token, json=credentials.model_dump())
+        response = await client.post(url_token, json=credentials.model_dump(), headers=headers)
         if response.status_code == 200:
             return response.json()
         elif response.status_code != 200:
@@ -39,7 +40,7 @@ async def verify_token(access: Token):
     async with httpx.AsyncClient() as client:
          response = await client.post(url_verify, json=access.model_dump(), headers = headers)
          if response.status_code == 200:
-             return "Tokén validado"
+             return response.json()
          elif response.status_code != 200:
             raise HTTPException(status_code = 401, detail=messages.unauthorized_token)
     
